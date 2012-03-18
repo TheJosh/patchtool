@@ -1,0 +1,100 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	font-family: sans-serif;
+	font-size: 12px;
+}
+
+
+#head {
+	padding: 20px;
+	background: #18A303;
+}
+
+#head a {
+	color: #000;
+}
+
+#body {
+	padding: 20px;
+}
+
+#foot {
+	padding: 10px;
+	font-size: 9px;
+	border-top: 1px #18A303 solid;
+	margin-top: 25px;
+}
+
+
+p {
+	line-height: 1.7em;
+	margin-bottom: 1em;
+}
+
+h1 {
+	margin-bottom: 0.5em;
+}
+
+h2,h3,h4 {
+	margin: 1.3em 0 0.5em 0;
+}
+
+ul, ol {
+	margin: 0.5em 1.5em;
+}
+
+
+table {}
+
+th {
+	padding: 6px 12px;
+	text-align: left;
+	border-bottom: 1px #ccc dashed;
+}
+
+td {
+	padding: 6px 12px;
+}
+
+
+.info-label {
+	padding: 2px 4px;
+	background: #A80909;
+	color: #FFF;
+	font-weight: bold;
+	border-radius: 2px;
+	text-transform: uppercase;
+	font-size: 9px;
+}
+
+
+.quickapply {
+	font-family: monospace;
+}
+
+
+.email {
+	padding: 10px;
+	background: #eee;
+	margin: 10px 0;
+	width: 75%;
+}
+
+.email * {
+	margin: 0;
+	padding: 0;
+}
+
+.email p.added {
+	float: right;
+}
+
+.email pre {
+	margin: 1em 0 0 0;
+}
+
+
