@@ -1,0 +1,8 @@
+This little tool is designed to read mailman archives, and extract patches from them, creating a cute little list.
+
+Originally created for LibreOffice, but usable by anyone.
+
+TODO:
+ - "git patch --check" support
+ - License check support
+ - Support for detection of inline patches.
