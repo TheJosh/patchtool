@@ -57,6 +57,14 @@ while ($msg = mysql_fetch_assoc($res)) {
 	preg_match('!<pre>(.+?)</pre>!ims', $html, $matches);
 	$body = trim(html_entity_decode($matches[1]));
 	
+	if (preg_match('!^---(.+?)--\n[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+!ims', $body)) {
+		echo "Looks like one of those crazy inline patches!\n";
+		
+		// TODO: Handle these!
+	}
+	
+	echo "Number of message parts: ", count($parts), "\n";
+	
 	$parts = explode('-------------- next part --------------', $body);
 	
 	echo "Number of message parts: ", count($parts), "\n";
