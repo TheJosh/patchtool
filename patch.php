@@ -3,7 +3,7 @@ require_once 'func.php';
 
 $_GET['id'] = (int) $_GET['id'];
 
-$q = "SELECT name FROM patches WHERE id = {$_GET['id']}";
+$q = "SELECT name FROM threads WHERE id = {$_GET['id']}";
 $res = db_query($q);
 $patch = mysql_fetch_assoc($res)
 
@@ -31,7 +31,7 @@ $patch = mysql_fetch_assoc($res)
 	$q = "SELECT attachments.name, attachments.url
 		FROM attachments
 		INNER JOIN messages ON attachments.message_id = messages.id
-		WHERE messages.patch_id = {$_GET['id']}
+		WHERE messages.thread_id = {$_GET['id']}
 		ORDER BY attachments.id ASC";
 	$res = db_query($q);
 	if (mysql_num_rows($res) == 0) {
@@ -53,7 +53,7 @@ $patch = mysql_fetch_assoc($res)
 	<p>&nbsp;</p>
 	
 	<?php
-	$q = "SELECT subject, body, added FROM messages WHERE patch_id = {$_GET['id']} ORDER BY added ASC";
+	$q = "SELECT subject, body, added FROM messages WHERE thread_id = {$_GET['id']} ORDER BY added ASC";
 	$res = db_query($q);
 	
 	while ($row = mysql_fetch_assoc($res)) {

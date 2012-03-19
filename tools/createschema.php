@@ -8,8 +8,9 @@ $queries = array(
 	
 	"CREATE TABLE messages (
 		id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-		patch_id INT UNSIGNED NOT NULL,
+		thread_id INT UNSIGNED NOT NULL,
 		main_index VARCHAR(20),
+		fromaddr VARCHAR(255),
 		subject VARCHAR(255),
 		body MEDIUMTEXT,
 		added DATETIME,
@@ -23,7 +24,7 @@ $queries = array(
 		url VARCHAR(255)
 	)",
 	
-	"CREATE TABLE patches (
+	"CREATE TABLE threads (
 		id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
 		name VARCHAR(255),
 		added DATETIME,

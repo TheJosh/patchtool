@@ -15,13 +15,13 @@ require_once 'func.php';
 	
 	
 	<?php
-	$q = "SELECT patches.id, patches.name, patches.pushed, patches.added, patches.updated,
+	$q = "SELECT threads.id, threads.name, threads.pushed, threads.added, threads.updated,
 			COUNT(attachments.id) AS num_attachments
-		FROM patches
-		INNER JOIN messages ON messages.patch_id = patches.id
+		FROM threads
+		INNER JOIN messages ON messages.thread_id = threads.id
 		INNER JOIN attachments ON attachments.message_id = messages.id AND attachments.name != 'not available'
-		GROUP BY patches.id
-		ORDER BY patches.updated DESC, patches.id DESC
+		GROUP BY threads.id
+		ORDER BY threads.updated DESC, threads.id DESC
 		LIMIT 1000";
 	$res = db_query($q);
 	
