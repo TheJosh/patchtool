@@ -4,7 +4,8 @@ require_once '../func.php';
 $queries = array(
 	"DROP TABLE IF EXISTS messages",
 	"DROP TABLE IF EXISTS attachments",
-	"DROP TABLE IF EXISTS patches",
+	"DROP TABLE IF EXISTS threads",
+	"DROP TABLE IF EXISTS thread_tags",
 	
 	"CREATE TABLE messages (
 		id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
@@ -29,8 +30,14 @@ $queries = array(
 		name VARCHAR(255),
 		added DATETIME,
 		updated DATETIME,
-		pushed TINYINT UNSIGNED NOT NULL,
 		UNIQUE INDEX (name)
+	)",
+	
+	"CREATE TABLE thread_tags (
+		id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+		thread_id INT UNSIGNED NOT NULL,
+		tag VARCHAR(20) NOT NULL,
+		UNIQUE INDEX (thread_id, tag)
 	)",
 );
 

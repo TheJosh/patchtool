@@ -18,7 +18,7 @@ foreach ($matches as $m) {
 	$m[2] = html_entity_decode($m[2]);
 	$m[2] = trim($m[2]);
 	
-	if (! preg_match('!^\[(PATCH|PUSHED)!', $m[2])) continue;
+	if (! preg_match('!PATCH|PUSHED|REVIEW!' ,$m[2])) continue;
 	
 	echo "Message: {$m[1]} {$m[2]}\n";
 	
@@ -70,6 +70,7 @@ while ($msg = mysql_fetch_assoc($res)) {
 	foreach ($parts as $p) {
 		if (! preg_match('!^Name: (.+)$!m', $p, $matches)) continue;
 		$name = $matches[1];
+		if ($name == 'not available') continue;
 		
 		if (! preg_match('!<a href="([^"]+)"!i', $p, $matches)) continue;
 		$url = $matches[1];
@@ -101,17 +102,17 @@ while ($msg = mysql_fetch_assoc($res)) {
 	$date_sql = db_quote($msg['added']);
 	
 	$q = "SELECT id FROM threads WHERE name LIKE '{$subj_sql}' LIMIT 1";
-	$patch_res = db_query($q);
+	$thread_res = db_query($q);
 	
-	if (mysql_num_rows($patch_res) == 0) {
-		echo "Creating new patch: {$subj}\n";
+	if (mysql_num_rows($thread_res) == 0) {
+		echo "Creating new thread: {$subj}\n";
 		
-		$q = "INSERT INTO threads SET name = '{$subj_sql}', added = '{$date_sql}', updated = NOW(), pushed = 0";
+		$q = "INSERT INTO threads SET name = '{$subj_sql}', added = '{$date_sql}', updated = NOW()";
 		db_query($q);
 		$thread_id = mysql_insert_id();
 		
 	} else {
-		$row = mysql_fetch_assoc($patch_res);
+		$row = mysql_fetch_assoc($thread_res);
 		$thread_id = $row['id'];
 	}
 	
@@ -120,15 +121,7 @@ while ($msg = mysql_fetch_assoc($res)) {
 	$q = "UPDATE messages SET thread_id = {$thread_id} WHERE id = {$msg['id']}";
 	db_query($q);
 	
-	$is_push = false;
-	if (preg_match('!pushed!i', $msg['body']) or preg_match('!pushed!i', $msg['body'])) {
-		$is_push = true;
-		echo "Looks like a push.\n";
-	}
-	
-	$q = "UPDATE threads SET updated = '{$date_sql}'";
-	if ($is_push) $q .= ", pushed = 1";
-	$q .= " WHERE id = {$thread_id}";
+	$q = "UPDATE threads SET updated = '{$date_sql}' WHERE id = {$thread_id}";
 	db_query($q);
 	
 	flush();
@@ -136,5 +129,35 @@ while ($msg = mysql_fetch_assoc($res)) {
 
 
 
+echo "\n\n--- STEP 4; Tag threads ---\n";
+
+$q = "TRUNCATE TABLE thread_tags";
+db_query($q);
+
+$q = "SELECT thread_id FROM messages WHERE subject LIKE '%patch%'";
+$res = db_query($q);
+while ($msg = mysql_fetch_assoc($res)) {
+	$q = "INSERT IGNORE INTO thread_tags SET thread_id = {$msg['thread_id']}, tag = 'patch'";
+	db_query($q);
+	echo "Attached 'patch' to thread # {$msg['thread_id']}\n";
+}
+
+
+$q = "SELECT thread_id FROM messages WHERE subject LIKE '%pushed%' OR body LIKE '%pushed%'";
+$res = db_query($q);
+while ($msg = mysql_fetch_assoc($res)) {
+	$q = "INSERT IGNORE INTO thread_tags SET thread_id = {$msg['thread_id']}, tag = 'push'";
+	db_query($q);
+	echo "Attached 'push' to thread # {$msg['thread_id']}\n";
+}
+
+
+$q = "SELECT thread_id FROM messages WHERE subject LIKE '%review%'";
+$res = db_query($q);
+while ($msg = mysql_fetch_assoc($res)) {
+	$q = "INSERT IGNORE INTO thread_tags SET thread_id = {$msg['thread_id']}, tag = 'review'";
+	db_query($q);
+	echo "Attached 'review' to thread # {$msg['thread_id']}\n";
+}
 
 

@@ -12,12 +12,12 @@ $patch = mysql_fetch_assoc($res)
 <!DOCTYPE html>
 <html>
 <head>
-	<title>LibreOffice Patch Viewer</title>
+	<title>LibreOffice Mailinglist Tool</title>
 	<link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
 <div id="head">
-	<h1>LibreOffice Patch Viewer</h1>
+	<h1>LibreOffice Thread Viewer</h1>
 </div>
 <div id="body">
 	
@@ -53,13 +53,13 @@ $patch = mysql_fetch_assoc($res)
 	<p>&nbsp;</p>
 	
 	<?php
-	$q = "SELECT subject, body, added FROM messages WHERE thread_id = {$_GET['id']} ORDER BY added ASC";
+	$q = "SELECT fromaddr, subject, body, added FROM messages WHERE thread_id = {$_GET['id']} ORDER BY added ASC";
 	$res = db_query($q);
 	
 	while ($row = mysql_fetch_assoc($res)) {
 		echo '<div class="email">';
 		echo '  <p class="added">', html($row['added']), '</p>';
-		echo '  <h3>', html($row['subject']), '</h3>';
+		echo '  <h3>', html($row['fromaddr']), ' &nbsp; ', html($row['subject']), '</h3>';
 		echo '  <pre>', html(trim($row['body'])), '</pre>';
 		echo '</div>';
 	}
